@@ -1,0 +1,4 @@
+<object width="600" height="409"> <param name="movie" value="http://fpdownload.adobe.com/strobe/FlashMediaPlayback.swf"></param>
+<param name="flashvars" value="src=rtmp%3A%2F%2F<?php echo $_REQUEST["vserverip"] ?>%2Fvod%2Fmp4%3A<?php echo $_REQUEST["vfilename"] ?>&loop=true&autoPlay=true&streamType=recorded&initialBufferTime=1&expandedBufferTime=3"></param>
+<param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param>
+<embed src="http://fpdownload.adobe.com/strobe/FlashMediaPlayback.swf" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="600" height="409" flashvars="src=rtmp%3A%2F%2F<?php echo $_REQUEST["vserverip"] ?>%2Fvod%2Fmp4%3A<?php echo $_REQUEST["vfilename"] ?>&loop=true&autoPlay=true&streamType=recorded&initialBufferTime=1&expandedBufferTime=3"></embed></object>

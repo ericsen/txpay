@@ -1,0 +1,176 @@
+<html>
+<head>
+<title>main</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="../style_{COMID}/control_main.css" type="text/css">
+<script src="../js/pub_library.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.10.0/js/md5.min.js"></script>
+
+<style type="text/css">
+.wrap { table-layout:fixed;word-break:break-all;overflow:hidden; }
+tr{ 
+border-collapse:collapse;
+ border: 1px solid black;
+}
+</style>
+<script language=javascript>
+  function checkoid() {
+  	var oid = document.getElementById("vonum").value;
+  	window.open("addnew.php?act=checkoid&vonum=" + oid,"mywindow","width=700,height=300");
+	}
+	
+	function transRetTitle(data1) {
+      var ddd = data1["trans_result"]["0"]["dst"];
+      document.getElementById("vtitle").value = ddd;
+	}
+	function transRetDesc(data1) {
+      var ddd = data1["trans_result"]["0"]["dst"];
+      document.getElementById("vdesc1").value = ddd;
+	}
+
+	function trans(cnt) {
+		var appid = '20171229000110250';
+		var key = 'FaECMWRXZKFqU7xm0Dfj';
+		var salt = (new Date).getTime();
+		var from = 'auto';
+		var to = 'zh';
+
+		if (cnt=="title") {
+				var query = document.getElementById("vtitle").value;
+				var str1 = appid + query + salt +key;
+				var sign = md5(str1);
+				$.ajax({
+				    url: 'http://api.fanyi.baidu.com/api/trans/vip/translate',
+				    type: 'get',
+				    dataType: 'jsonp',
+				    jsonpCallback: "transRetTitle",
+				    data: {
+				        q: query,
+				        appid: appid,
+				        salt: salt,
+				        from: from,
+				        to: to,
+				        sign: sign
+				    },
+				    success: function (data) {
+				        console.log(data);
+				    } 
+				});
+		} else if (cnt=="desc1") {
+				var query = document.getElementById("vdesc1").value;
+				var str1 = appid + query + salt +key;
+				var sign = md5(str1);
+				$.ajax({
+				    url: 'http://api.fanyi.baidu.com/api/trans/vip/translate',
+				    type: 'get',
+				    dataType: 'jsonp',
+				    jsonpCallback: "transRetDesc",
+				    data: {
+				        q: query,
+				        appid: appid,
+				        salt: salt,
+				        from: from,
+				        to: to,
+				        sign: sign
+				    },
+				    success: function (data) {
+				        console.log(data);
+				    } 
+				});
+		}
+	}
+
+	function douban() {
+		var tt = document.getElementById("vtitle").value;
+		$.ajax({
+		    url: 'https://api.douban.com//v2/movie/search',
+		    type: 'get',
+		    dataType: 'jsonp',
+		    jsonpCallback: "FetchArtist",
+		    data: {
+		        q: tt,
+		    },
+		    success: function (data) {
+		        console.log(data);
+		    } 
+		});
+	}
+	function FetchArtist(data1) {
+      var ddd = data1["subjects"]["0"]["casts"];
+      alert(Object.keys(data1["subjects"]["0"]["casts"]).length);
+      //document.getElementById("vtitle").value = ddd;
+	}
+
+</script>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous">
+</script>
+ </head>
+
+<body leftmargin="0" topmargin="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td class="m_tline">
+	<table border="0" cellspacing="0" cellpadding="0"><tr>
+	<td width="100"> &nbsp; 新增(修改)影片</td>
+	</tr></table>
+</td></tr>
+<tr><td height="4"></td></tr>
+</table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="m_line">
+  <tr>
+    <td>
+    	<form method=post action="addnew.php">
+    		<input type="hidden" name="act" id="act" value="{ACT}">
+    		<input type="hidden" name="vid" id="vid" value="{vid}">
+
+    	<table width="100%" border="0" cellpadding="3" cellspacing="1">
+  				<tr><td>影片類型</td><td>
+  					
+<select name=vsubtype id=vsubtype>
+  <option value="AM">歐美電影</option>
+  <option value="CM">中文電影</option>
+  <option value="JM">日韩電影</option>
+  <option value="AD">歐美劇</option>
+  <option value="JD">日韩劇</option>
+  <option value="TD">港台劇</option>
+  <option value="CD">大陸劇</option>
+  <option value="JP">亞洲AV</option>
+  <option value="AP">歐美AV</option>
+  <option value="ST">頻道直播</option>
+</select>  					
+  					
+  					
+  				</td>  				</tr>
+          <tr><td>共幾集/第幾集</td><td><input type=text name=vtotalseries size=4 value="{vtotalseries}"> 如果大於1,會自動在片名加上編號,檔名留下目錄名即可<br>如果單純修改某一片,則此處為1</td></tr>
+          <tr><td>片名</td><td><input type="text" name=vtitle id="vtitle" size=50 value="{vtitle}"><button type="button" onclick="trans('title');">翻譯</button></td></tr>
+          <tr><td width=100>影片檔名</td><td><input type=text name=vfilename value="{vfilename}" size=50></td></tr>
+          <tr><td>照片檔名</td><td><input type=text name=vimage value="{vimage}" size=50></td></tr>
+          <tr><td>大照片檔名</td><td><input type=text name=vimage1 value="{vimage1}" size=50></td></tr>
+          <tr><td>發行日</td><td><input type=text name=vrdate size=10 value="{vrdate}"> 例如 : 2012-09-03 or 2017</td></tr>
+          <tr><td>片長</td><td><input type=text name=vlength size=10 value="{vlength}"> 例如 ; 120m30s</td></tr>
+          <tr><td>演員</td><td><input type=text name=vartist size=50 value="{vartist}"><button type="button" onclick="douban();">獲取</button></td></tr>
+          <tr><td>導演/AV發行商</td><td><input type=text name=vproducer value="{vproducer}"></td></tr>
+          <td>簡介(中文)</td><td><textarea cols=50 rows=8 name=vdesc1 id=vdesc1>{vdesc1}</textarea><button type="button" onclick="trans('desc1');">翻譯</button></td></tr>
+          <td>簡介(英文)</td><td><textarea cols=50 rows=8 name=vdesc2>{vdesc2}</textarea></td></tr>
+          <tr><td>狀態</td><td><input type=text name=vstatus maxlength=1 size=2 value="{vstatus}"> 1:開放 0:關閉</td></tr>
+          
+          <tr><td>AV原廠編號</td><td><input type=text name=vonum name=vonum value="{vonum}"><input type=button name=checkid value="檢查是否有重複原廠編號關鍵字" onclick="javascript:checkoid();"></td></tr>
+          <tr><td>碼</td><td><input type=text name=vmask maxlength=1 size=2 value="{vmask}"> 1:有碼 0:無碼</td></tr>
+          <td>簡介(原文)</td><td><textarea cols=50 rows=8 name=vdesc>{vdesc}</textarea></td></tr>
+
+          <tr><td>AV TAG</td><td>{TAGS}</td></tr>
+
+          <tr><td></td><td><input type=submit id=submit name=submit value="新增(修改)"><input type=reset></td></tr>
+       </table>
+      </form>
+      </td>
+    </tr>
+  </table>
+</body>
+<script>
+	$("select[name='vsubtype'] option[value='{vsubtype}']").prop('selected', true);
+	
+</script>
+</html>

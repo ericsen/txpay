@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+	<meta name="author" content="txpay.tw" />
+	<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+	<script src='https://code.jquery.com/jquery-1.9.1.min.js'></script>
+	<link type="text/css" rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/7.0.3/jquery.mmenu.all.css'>
+	<link type="text/css" rel="stylesheet" href="style/main.css" />
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/7.0.3/jquery.mmenu.all.js'></script>
+	<script type="text/javascript">
+		$(function() {
+			$('nav#menu').mmenu();
+		});
+	</script>
+	<style>
+		tableo {border:1px solid #000}
+		table{
+    table-layout: fixed;
+    border-collapse: collapse;
+		}
+		td{
+    word-wrap:break-word;
+    padding: 5px;
+		}
+		tr:hover {
+		    background: #000 !important;
+		}
+		tr:hover td {
+		    background: #c7d4dd !important;
+		}
+	</style>
+
+	<style>
+		th, td {border:1px solid #aaa}
+		table {border-collapse:collapse}
+	</style>
+	
+	<script language=javascript>
+	</script>
+</head>
+<body>
+<div class="page">
+  <!-- INCLUDE BLOCK : MENU -->
+	<div class="header">
+		<a href="#menu" data-icon="grid"></a>
+		鴻運支付
+	</div>
+  <div class='content'>
+    <h1>補水與提領記錄</h1>
+    <form method=post><input type=hidden name=act value=list>
+		<table>
+			<tbody>
+				<tr>
+					<td>日期</td>
+					<td><input name="sdate" type="date" value="{SDATE}"/>到<input name="edate" type="date" value="{EDATE}"/>
+					</td>
+				</tr>
+				<tr>
+					<td>種類</td>
+					<td>
+						<select name=ltype id=ltype>
+							<option value="">全部</option>
+							<option value="addfund">補水</option>
+							<option value="withdrawal">提領</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>關鍵字</td>
+					<td><input type=text name=keyword id=keyword placeholder="關鍵字"></td>
+				</tr>
+				<tr>
+					<td colspan=2 align=center><input type=submit value="查詢"><input type=reset value="重置"></td>
+				</tr>
+			</tbody>
+		</table>
+    
+    如有疑問，請洽客服中心
+    
+    <div id=divchgpwd style="display: {RSHOW};">
+			<table>
+				<caption>查詢結果:
+					第<select name="page" onChange="this.form.submit()" class="za_select">{PAGE_OPTION}</select> / {PAGE_TOTAL} 頁
+					</caption>
+				<thead>
+					<tr>
+						<td>#</td>
+						<td>到帳日期</td>
+						<td>訂單號</td>
+						<td>種類</td>
+						<td>金額</td>
+						<td>備註</td>
+					</tr>
+				</thead>
+				<tbody>
+<!-- START BLOCK : DATA -->
+					<tr>
+						<td>{ID}</td>
+						<td>{RDATETIME}</td>
+						<td>{LID}</td>
+						<td>{LTYPE}</td>
+						<td align=center>{AMOUNT}</td>
+						<td>{NOTE}</td>
+					</tr>
+<!-- END BLOCK : DATA -->
+<!-- START BLOCK : NODATA -->
+					<tr>
+						<td colspan=6 align=center><span style="color:blue">查無資料 , 請改變條件後再試</span></td>
+					</tr>
+<!-- END BLOCK : NODATA -->
+				</tbody>
+			</table>
+    </div>
+   	</form>
+  </div>
+</div>
+<script language=javascript>
+$(function() {
+    $("#ltype").val('{LTYPE}').change();
+    $("#keyword").val('{KEYWORD}').change();
+});	
+</script>
+</body>
+</html>

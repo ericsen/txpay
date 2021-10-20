@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+	<meta name="author" content="txpay.tw" />
+	<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+	<script src='https://code.jquery.com/jquery-1.9.1.min.js'></script>
+	<link type="text/css" rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/7.0.3/jquery.mmenu.all.css'>
+	<link type="text/css" rel="stylesheet" href="style/main.css" />
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/7.0.3/jquery.mmenu.all.js'></script>
+	<script type="text/javascript">
+		$(function() {
+			$('nav#menu').mmenu();
+		});
+	</script>
+	<style>
+		tableo {border:1px solid #000}
+		table{
+    table-layout: fixed;
+    border-collapse: collapse;
+		}
+		td{
+    word-wrap:break-word;
+    padding: 5px;
+		}
+		tr:hover {
+		    background: #000 !important;
+		}
+		tr:hover td {
+		    background: #c7d4dd !important;
+		}
+	</style>
+
+	<style>
+		th, td {border:1px solid #aaa}
+		table {border-collapse:collapse}
+	</style>
+	
+	<script language=javascript>
+		function genrndsid() {
+			var date = new Date();
+			var aaa = "UD" + date.getFullYear() + date.getMonth() + date.getDate() + "RR" +  Math.random().toString(36).substr(2, 10);
+			$("#storeorderid").val(aaa);
+		}
+		function speedmoney(pp) {
+			$("#amount").val(pp);
+		}
+	</script>
+</head>
+<body>
+<div class="page">
+  <!-- INCLUDE BLOCK : MENU -->
+	<div class="header">
+		<a href="#menu" data-icon="grid"></a>
+		鴻運支付
+	</div>
+  <div class='content'>
+    <h1>產生儲值碼</h1>
+    <form method=post target="_blank"><input type=hidden name=act value=pay>
+		<table>
+			<tbody>
+				<tr>
+					<td>繳費方式</td>
+					<td>
+						<label for=ptype1><input type=radio name=ptype id=ptype1 value="CSPM" checked onclick="$('#trbankid').hide();">超商代碼</lable>
+					  <label for=ptype2><input type=radio name=ptype id=ptype2 value="VBANK" onclick="$('#trbankid').show();">ATM虛擬帳號</label>
+					</td>
+				</tr>
+				<tr id="trbankid" style="display:none">
+					<td>虛擬帳號儲值銀行</td>
+					<td>
+						<label for=b007><input type=radio name=bankid id=b007 value="007" checked><img src="/images/007.png" width=10% alt="第一銀行" title="第一銀行"></label>
+						<label for=b822><input type=radio name=bankid id=b822 value="822"><img src="/images/822.png" width=10% alt="中國信託" title="中國信託"></label>
+						<label for=b812><input type=radio name=bankid id=b812 value="812"><img src="/images/812.png" width=10% alt="台新銀行" title="台新銀行"></label>
+					</td>
+				</tr>
+				<tr>
+					<td>金額<span style="color:red">＊</span></td>
+					<td><input type=text name=amount id=amount value="" placeholder="請輸入正整數，不含小數點"><br/>
+						<input type=button onclick="speedmoney(500);" value="500">
+						<input type=button onclick="speedmoney(1000);" value="1000">
+						<input type=button onclick="speedmoney(3000);" value="3000">
+						<input type=button onclick="speedmoney(5000);" value="5000"><br/>
+						<input type=button onclick="speedmoney(10000);" value="10000">
+						<input type=button onclick="speedmoney(15000);" value="15000">
+						<input type=button onclick="speedmoney(20000);" value="20000">
+						</td>
+				</tr>
+				<tr>
+					<td>商品名稱<span style="color:red">＊</span></td>
+					<td><input type=text name=payinfo id=payinfo value="網購商品"></td>
+				</tr>
+				<tr>
+					<td>內部訂單編號(不可重複)<span style="color:red">＊</span></td>
+					<td><input type=text name=storeorderid id=storeorderid value=""><br/><input type=button onclick="genrndsid();" value="亂數產生訂單號"></td>
+				</tr>
+				<tr>
+					<td>儲值姓名</td>
+					<td><input type=text name=payname id=payname value="消費者"></td>
+				</tr>
+				<tr>
+					<td>儲值手機</td>
+					<td><input type=text name=payphone id=payphone value="0900000000"></td>
+				</tr>
+				<tr>
+					<td>儲值email</td>
+					<td><input type=text name=payemail id=payemail value="noname@nomail.com"></td>
+				</tr>
+				<tr>
+					<td>Note1</td>
+					<td><input type=text name=note1 id=note1 value="" placeholder="備註訊息"></td>
+				</tr>
+				<tr>
+					<td>Note2</td>
+					<td><input type=text name=note2 id=note2 value="" placeholder="備註訊息"></td>
+				</tr>
+				<tr>
+					<td>有效儲值期限</td>
+					<td><input type=text name=expiredate id=expiredate value="{EXPIREDATE}"></td>
+				</tr>
+				<tr>
+					<td>關聯Username</td>
+					<td><input type=text name=userid id=userid></td>
+				</tr>
+				<tr>
+					<td colspan=2 align=center><input type=submit value="立即產生"><input type=reset value="重置"></td>
+				</tr>
+			</tbody>
+		</table>
+    如有疑問，請洽客服中心
+    
+   	</form>
+  </div>
+</div>
+
+<!-- START BLOCK : REDIR -->
+<div id=divredirect style="display:none">
+		<form name='fr' action='https://gw.txpayapi.com/api3/gateway.php' method='POST'>
+			<input type=hidden name="StoreID"      value="{StoreID}">
+			<input type=hidden name="Amount"       value="{Amount}">
+			<input type=hidden name="Currency"     value="{Currency}">    
+			<input type=hidden name="PayMethod"    value="{PayMethod}">   
+			<input type=hidden name="PayInfo"      value="{PayInfo}">     
+			<input type=hidden name="StoreOrderId" value="{StoreOrderId}">
+			<input type=hidden name="PayName"      value="{PayName}">     
+			<input type=hidden name="PayPhone"     value="{PayPhone}">    
+			<input type=hidden name="PayEmail"     value="{PayEmail}">    
+			<input type=hidden name="Note1"        value="{Note1}">       
+			<input type=hidden name="Note2"        value="{Note2}">       
+			<input type=hidden name="ExpireDate"   value="{ExpireDate}">  
+			<input type=hidden name="UserId"       value="{UserId}">      
+			<input type=hidden name="ReturnURL"    value="{ReturnURL}">   
+			<input type=hidden name="Chksum"       value="{Chksum}">      
+			<input type=hidden name="Bankid"       value="{Bankid}">      
+		</form>
+		<script type='text/javascript'>
+			window.onload=function(){ 
+			    window.setTimeout(document.fr.submit(), 3000);
+			};
+		</script>	
+</div>
+<!-- END BLOCK : REDIR -->
+</body>
+</html>

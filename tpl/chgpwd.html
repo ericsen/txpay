@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+	<meta name="author" content="txpay.tw" />
+	<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+	<script src='https://code.jquery.com/jquery-1.9.1.min.js'></script>
+	<link type="text/css" rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/7.0.3/jquery.mmenu.all.css'>
+	<link type="text/css" rel="stylesheet" href="style/main.css" />
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/7.0.3/jquery.mmenu.all.js'></script>
+	<script type="text/javascript">
+		$(function() {
+			$('nav#menu').mmenu();
+		});
+	</script>
+	<style>
+		tableo {border:1px solid #000}
+		table{
+    table-layout: fixed;
+		}
+		td{
+    word-wrap:break-word;
+    padding: 5px;
+		}
+	</style>
+	<script language=javascript>
+		function chgpwd() {
+			if ($("#oldpass").val()=="") {
+				alert("舊密碼不可以是空白!!");
+				exit();
+			}
+			if ($("#newpass").val()=="") {
+				alert("新密碼不可以是空白!!");
+				exit();
+			}
+			if ($("#newpass").val().length < 6) {
+				alert("新密碼長度必須大於6位數英數字!!");
+				exit();
+			}
+			if ($("#oldpass").val()== $("#newpass").val()) {
+				alert("新舊密碼不可以相同!!");
+				exit();
+			}
+			if ($("#newpass").val()== $("#newpass2").val()) {
+				$("#fchgpwd").submit();
+			} else {
+				alert("兩次密碼不相同!!");
+				exit();
+			}
+		}
+		function ctoggle() {
+			$("#fchgpwd").trigger("reset");
+			$("#divchgpwd").toggle();
+		}
+	</script>
+</head>
+<body>
+<div class="page">
+  <!-- INCLUDE BLOCK : MENU -->
+	<div class="header">
+		<a href="#menu" data-icon="grid"></a>
+		鴻運支付
+	</div>
+  <div class='content'>
+    <h1>變更登入密碼</h1>
+		<table>
+			<tbody>
+				<tr>
+					<td>登入帳號</td>
+					<td>{MUID}</td>
+				</tr>
+				<tr>
+					<td>登入密碼</td>
+					<td>*************<input type=button onclick="ctoggle();" value="變更登入密碼"></td>
+				</tr>
+			</tbody>
+		</table>
+    如有疑問，請洽客服中心
+    
+    <div id=divchgpwd style="display: none;">
+    	<form method=post id=fchgpwd><input type=hidden name=act value=chgpwd>
+			<table class=tableo frame=box rules=none>
+				<caption>變更登入密碼</caption>
+     		<colgroup>
+	     		<col style="width:200px">
+        	<col/>
+     		</colgroup>
+        <tbody>
+					<tr>
+						<td>舊登入密碼</td>
+						<td><input type=password name=oldpass id=oldpass></td>
+					</tr>
+					<tr>
+						<td>新登入密碼<br/>6位以上英數字</td>
+						<td><input type=password name=newpass id=newpass></td>
+					</tr>
+					<tr>
+						<td>再一次新登入密碼</td>
+						<td><input type=password name=newpass2 id=newpass2></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input type=button onclick="chgpwd();" value="確定變更">
+							<input type=button onclick="ctoggle();" value="取消">
+							</td>
+					</tr>
+				</tbody>
+			</table>
+    	</form>
+    </div>
+    
+  </div>
+</div>
+</body>
+</html>

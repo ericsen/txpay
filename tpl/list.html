@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+  <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> 
+<script language=javascript>
+function callout(prid,params) {	//call out
+    var form = document.createElement("form");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", "process.php");
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+            form.appendChild(hiddenField);
+        }
+    }
+    document.body.appendChild(form);
+    form.submit();		
+}
+function cancelorder(prid) {	//取消本單
+	var params = {'act':'cancel','prid' : prid};
+	callout(prid,params);
+}
+function payorder(prid) {	//繳款本單
+	var params = {'act':'pay','prid' : prid};
+	callout(prid,params);
+}
+function finishorder(prid) {	//撥款本單
+	var params = {'act':'transferfund','prid' : prid};
+	callout(prid,params);
+}
+function holdorder(prid) {	//保留本單
+	var params = {'act':'hold','prid' : prid};
+	callout(prid,params);
+}
+function cancelrefund1(prid) {	//取消退款:可用餘額不足
+	var params = {'act':'cancelrefund','prid' : prid,'errmsg':'可用餘額不足'};
+	callout(prid,params);
+}
+function cancelrefund2(prid) {	//取消退款:帳號錯誤
+	var params = {'act':'cancelrefund','prid' : prid,'errmsg':'帳號錯誤'};
+	callout(prid,params);
+}
+function refundprocessing(prid) {	//退款處理中
+	var params = {'act':'refundprocessing','prid' : prid};
+	callout(prid,params);
+}
+function finishrefund(prid) {	//完成退款
+	var params = {'act':'finishrefund','prid' : prid,'bid' : '1','PBankAccount':'','PBankCode':''};
+	callout(prid,params);
+}
+</script>
+</head>
+
+<body>
+  <div class="py-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+        	儲值
+          <table class="table">
+            <thead>
+              <tr>
+                <th>訂單編號</th>
+                <th>繳款人/電話</th>
+                <th>交易時間</th>
+                <th>交易狀態</th>
+                <th>支付方式</th>
+                <th>交易金額</th>
+                <th>商家訂單號</th>
+                <th>備註1</th>
+                <th>備註2</th>
+                <th>付款日</th>
+                <th>IP</th>
+                <th>功能</th>
+              </tr>
+            </thead>
+            <tbody>
+<!-- START BLOCK : Data -->
+              <tr>
+                <td>{prid}</td>
+                <td>{PayName}<br>{PayPhone}</td>
+                <td>{rdatetime}</td>
+                <td>{pgResult}<br>{Transfered}</td>
+                <td>{PayType}</td>
+                <td>{Amount}</td>
+                <td>{StoreOrderId}</td>
+                <td>{Note1}</td>
+                <td>{Note2}</td>
+                <td>{PayDate}<br>{PayTime}</td>
+                <td>{IP}</td>
+                <td><button onclick="cancelorder({prid});">取消</button><button onclick="payorder({prid});">繳款完成</button>
+                	<button onclick="finishorder({prid});">撥款</button><button onclick="holdorder({prid});">設為保留</button></td>
+              </tr>
+<!-- END BLOCK : Data -->
+            </tbody>
+          </table>
+<hr>退款
+          <table class="table">
+            <thead>
+              <tr>
+                <th>訂單編號</th>
+                <th>商家單號</th>
+                <th>退款人帳號/銀行</th>
+                <th>申請時間</th>
+                <th>交易狀態</th>
+                <th>退款金額</th>
+                <th>備註1</th>
+                <th>備註2</th>
+                <th>付款日/時間</th>
+                <th>付款銀行/付款帳號</th>
+                <th>功能</th>
+              </tr>
+            </thead>
+            <tbody>
+<!-- START BLOCK : RData -->
+              <tr>
+                <td>{rid}</td>
+                <td>{StoreOrderId}</td>
+                <td>{VBankAccount}<br>{VBankCode}</td>
+                <td>{rdatetime}</td>
+                <td>{pgResult}</td>
+                <td>{Amount}</td>
+                <td>{Note1}</td>
+                <td>{Note2}</td>
+                <td>{PayDate}<br>{PayTime}</td>
+                <td>{PBankCode}<br>{PBankCode}</td>
+                <td><button onclick="refundprocessing({prid});">開始處理</button>
+                	<button onclick="cancelrefund1({prid});">取消(可用餘額不足)</button><button onclick="cancelrefund2({prid});">取消(帳號錯誤)</button>
+                	<button onclick="finishrefund({prid});">退款完成(bid=1)</button></td>
+              </tr>
+<!-- END BLOCK : RData -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

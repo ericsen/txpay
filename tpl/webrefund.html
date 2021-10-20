@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+	<meta name="author" content="txpay.tw" />
+	<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+	<script src='https://code.jquery.com/jquery-1.9.1.min.js'></script>
+	<link type="text/css" rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/7.0.3/jquery.mmenu.all.css'>
+	<link type="text/css" rel="stylesheet" href="style/main.css" />
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/7.0.3/jquery.mmenu.all.js'></script>
+	<script type="text/javascript">
+		$(function() {
+			$('nav#menu').mmenu();
+		});
+	</script>
+	<style>
+		tableo {border:1px solid #000}
+		table{
+    table-layout: fixed;
+    border-collapse: collapse;
+		}
+		td{
+    word-wrap:break-word;
+    padding: 5px;
+		}
+		tr:hover {
+		    background: #000 !important;
+		}
+		tr:hover td {
+		    background: #c7d4dd !important;
+		}
+	</style>
+
+	<style>
+		th, td {border:1px solid #aaa}
+		table {border-collapse:collapse}
+		
+		h2.headertekst {
+ 			text-align: center;
+ 			color:red;
+		}
+	</style>
+	
+	<script language=javascript>
+		function genrndsid() {
+			var date = new Date();
+			var aaa = "UD" + date.getFullYear() + date.getMonth() + date.getDate() + "RR" +  Math.random().toString(36).substr(2, 10);
+			$("#storeorderid").val(aaa);
+		}	
+		
+		function confirmthis() {
+			document.rfrm.submit();
+		}
+		
+		function submitthis() {
+	    $.ajax({
+	      type: "post",
+	      url: "https://gw.txpayapi.com/api3/refund.php",
+	      data:  $("#fr").serialize(), // serializes the form's elements.
+	      dataType: "json",
+	      success: function(data) {
+	      	if (data["Result"]=="OK") {
+	      		$('#divtable').html("<h2 class=headertekst>退款處理中，訂單編號: " + data["id"] + "</h2><br/><input type=button onclick='window.location=\"webrefund.php'\";' value='新增一筆'>");
+	      	} else {
+	      		alert("錯誤 : " + data);
+	      	}
+	      }
+	    });
+		}
+
+		
+	</script>
+</head>
+<body>
+<div class="page">
+  <!-- INCLUDE BLOCK : MENU -->
+	<div class="header">
+		<a href="#menu" data-icon="grid"></a>
+		鴻運支付
+	</div>
+  <div class='content' id='content'>
+    <h1>退款</h1>
+    <div id=divtable>
+    <form method=post name=rfrm id=rfrm><input type=hidden name=act value=refund>
+		<table>
+			<tbody>
+				<tr>
+					<td>目前帳戶剩餘可用額度（僅供參考）</td>
+					<td>{BALANCE}</td>
+				</tr>
+				<tr>
+					<td>匯款銀行代號<span style="color:red">＊</span></td>
+					<td><input type=text name=VBankCode id=VBankCode value="" placeholder="例如:822"></td>
+				</tr>
+				<tr>
+					<td>匯款帳號<span style="color:red">＊</span></td>
+					<td><input type=text name=VBankAccount id=VBankAccount value=""></td>
+				</tr>
+				<tr>
+					<td>金額<span style="color:red">＊</span><br/>單筆金額必須大於1000元</td>
+					<td><input type=text name=amount id=amount value="" placeholder="請輸入正整數，不含小數點"><br/>
+						</td>
+				</tr>
+				<tr>
+					<td>匯款銀行分行</td>
+					<td><input type=text name=VBankName id=VBankName value="" placeholder="例如:中國信託內湖分行"></td>
+				</tr>
+				<tr>
+					<td>匯款帳戶名稱</td>
+					<td><input type=text name=VAccountName id=VAccountName value="" placeholder="帳戶名稱全名"></td>
+				</tr>
+				<tr>
+					<td>內部訂單編號(不可重複)<span style="color:red">＊</span></td>
+					<td><input type=text name=storeorderid id=storeorderid value=""><br/><input type=button onclick="genrndsid();" value="亂數產生訂單號"></td>
+				</tr>
+				<tr>
+					<td>Note1</td>
+					<td><input type=text name=note1 id=note1 value="" placeholder="備註訊息"></td>
+				</tr>
+				<tr>
+					<td>Note2</td>
+					<td><input type=text name=note2 id=note2 value="" placeholder="備註訊息"></td>
+				</tr>
+				<tr>
+					<td>關聯Username</td>
+					<td><input type=text name=userid id=userid></td>
+				</tr>
+				<tr>
+					<td colspan=2 align=center><input type=button value="退款" onclick="confirmthis();"><input type=reset value="重置"></td>
+				</tr>
+			</tbody>
+		</form>
+		</table>
+		</div>
+    <ul>
+    	<li>以上資料若有任何地方輸入錯誤導致匯款失敗或是匯款錯誤,本公司將不負任何責任！</li>
+    	<li>確認後立即馬上送出，不可臨時取消！</li>
+    	<li>匯款前請先確認帳戶內剩餘額度足夠，若不足夠，匯款會馬上失敗</li>
+    	<li>請確認看到退款<b>訂單編號</b>後，才為系統已經受理退款申請！</li>
+    </ul>
+    如有疑問，請洽客服中心
+  </div>
+</div>
+<!-- START BLOCK : REDIR -->
+<div id="divredirect" name="divredirect" style="display:none">
+		<form name='fr' id='fr' method='POST'>
+			<input type=hidden name="StoreID"      value="{StoreID}">
+			<input type=hidden name="Amount"       value="{Amount}">
+			<input type=hidden name="Currency"     value="{Currency}">    
+			<input type=hidden name="PayMethod"    value="RETURN">   
+			<input type=hidden name="StoreOrderId" value="{StoreOrderId}">
+			<input type=hidden name="VBankAccount"      value="{VBankAccount}">     
+			<input type=hidden name="VBankCode"     value="{VBankCode}">    
+			<input type=hidden name="VBankName"     value="{VBankName}">    
+			<input type=hidden name="VAccountName"     value="{VAccountName}">    
+			<input type=hidden name="Note1"        value="{Note1}">       
+			<input type=hidden name="Note2"        value="{Note2}">       
+			<input type=hidden name="UserId"       value="{UserId}">      
+			<input type=hidden name="ReturnURL"    value="{ReturnURL}">   
+			<input type=hidden name="Chksum"       value="{Chksum}">      
+			<table>
+				<caption>請確認以下資訊都正確</caption>
+				<tbody>
+					<tr>
+						<td>匯款銀行代號</td>
+						<td><span style="color:red">{VBankCode}</span></td>
+					</tr>
+					<tr>
+						<td>匯款帳號</td>
+						<td><span style="color:red">{VBankAccount}</span></td>
+					</tr>
+					<tr>
+						<td>金額</td>
+						<td><span style="color:red">{Amount}</span></td>
+					</tr>
+					<tr>
+						<td>匯款銀行分行</td>
+						<td><span style="color:red">{VBankName}</span></td>
+					</tr>
+					<tr>
+						<td>匯款帳戶名稱</td>
+						<td><span style="color:red">{VAccountName}</span></td>
+					</tr>
+					<tr>
+						<td>內部訂單編號</td>
+						<td><span style="color:red">{StoreOrderId}</span></td>
+					</tr>
+					<tr>
+						<td colspan=2 align=center><input type=button value="確認資料正確立即退款" onclick="submitthis();this.disabled = true;"></td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+</div>
+<script language=javascript>
+	document.getElementById("divtable").innerHTML = document.getElementById("divredirect").innerHTML;
+</script>
+
+<!-- END BLOCK : REDIR -->
+</body>
+</html>

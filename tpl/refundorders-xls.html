@@ -1,0 +1,49 @@
+			<table>
+				<thead>
+					<tr>
+						<td>#</td>
+						<td>訂單日期</td>
+						<td>訂單號</td>
+						<td>商家訂單號</td>
+						<td>帳戶名</td>
+						<td>銀行帳號</td>
+						<td>付款狀態</td>
+						<td>交易金額</td>
+						<td>交易手續費</td>
+						<td>平台手續費</td>
+						<td>總扣款</td>
+						<td>說明</td>
+						<td>退款日期</td>
+						<td>Note1</td>
+						<td>Note2</td>
+						<td>用戶編號</td>
+					</tr>
+				</thead>
+				<tbody>
+<!-- START BLOCK : DATA -->
+					<tr>
+						<td>{ID}</td>
+						<td>{RDATETIME}</td>
+						<td>{RID}</td>
+						<td>{STOREORDERID}</td>
+						<td>{VACCOUNTNAME}</td>
+						<td>{VCODE}</td>
+						<td align=center>{PGRESULT}</td>
+						<td align=center>{AMOUNT}</td>
+						<td align=center>{TRANSFEE}</td>
+						<td align=center>{PLATFORMFEE}</td>
+						<td align=center>{TOTALAMOUNT}</td>
+						<td>{ERRMSG}</td>
+						<td>{PAIDDATE}</td>
+						<td>{NOTE1}</td>
+						<td>{NOTE2}</td>
+						<td>{USERID}</td>
+					</tr>
+<!-- END BLOCK : DATA -->
+<!-- START BLOCK : NODATA -->
+					<tr>
+						<td colspan=20 align=center><span style="color:blue">查無資料 , 請改變條件後再試</span></td>
+					</tr>
+<!-- END BLOCK : NODATA -->
+				</tbody>
+			</table>

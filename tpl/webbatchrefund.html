@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+	<meta name="author" content="txpay.tw" />
+	<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+	<script src='https://code.jquery.com/jquery-1.9.1.min.js'></script>
+	<link type="text/css" rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/7.0.3/jquery.mmenu.all.css'>
+	<link type="text/css" rel="stylesheet" href="style/main.css" />
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/7.0.3/jquery.mmenu.all.js'></script>
+	<script type="text/javascript">
+		$(function() {
+			$('nav#menu').mmenu();
+		});
+	</script>
+	<style>
+		tableo {border:1px solid #000}
+		table{
+    table-layout: fixed;
+    border-collapse: collapse;
+		}
+		td{
+    word-wrap:break-word;
+    padding: 5px;
+		}
+		tr:hover {
+		    background: #000 !important;
+		}
+		tr:hover td {
+		    background: #c7d4dd !important;
+		}
+	</style>
+
+	<style>
+		th, td {border:1px solid #aaa}
+		table {border-collapse:collapse}
+		
+		h2.headertekst {
+ 			text-align: center;
+ 			color:red;
+		}
+	</style>
+	
+	<script language=javascript>
+		function confirmthis() {
+			document.rfrm.submit();
+		}
+		
+		function submitthis() {
+			document.forms["fra"].submit();
+		}
+	
+	</script>
+</head>
+<body>
+<div class="page">
+  <!-- INCLUDE BLOCK : MENU -->
+	<div class="header">
+		<a href="#menu" data-icon="grid"></a>
+		鴻運支付
+	</div>
+  <div class='content' id='content'>
+    <h1>多筆退款</h1>
+    <div id=divtable>
+    <form method=post name=rfrm id=rfrm enctype="multipart/form-data"><input type=hidden name=act value=upload>
+		<table>
+			<tbody>
+				<tr>
+					<td>目前帳戶剩餘可用額度（僅供參考）</td>
+					<td>{BALANCE}</td>
+				</tr>
+				<tr>
+					<td>上傳CSV檔案<span style="color:red">＊</span></td>
+					<td><input type=file name=CSVFILE id=CSVFILE value="" accept=".csv"></td>
+				</tr>
+				<tr>
+					<td colspan=2 align=center><input type=button value="確定上傳" onclick="confirmthis();"></td>
+				</tr>
+			</tbody>
+		</table>
+   	</form>
+   	</div>
+    <ul>
+    	<li>下載<a href="/batchrefund.csv" download="batchrefund.csv">範例csv檔案</a></li>
+    	<li>csv檔案格式 : <span style="color:blue">銀行代號,帳號,金額,帳戶名,銀行名稱,內部訂單編號(唯一),備註1,備註2,關聯Username</span></li>
+    	<li>csv檔案請用UTF-8編碼儲存</li>
+    	<li>格式錯誤的資料將會自動跳過</li>
+    	<li>上傳後，系統會列出所有資料，請詳細比對確認後再送出！</li>
+    	<li>以上資料若有任何地方輸入錯誤導致匯款失敗或是匯款錯誤,本公司將不負任何責任！</li>
+    	<li>確認送出後，不可取消，也不可以更改！</li>
+    	<li>匯款前請先確認帳戶內剩餘額度足夠，若不足夠，匯款會馬上失敗</li>
+    	<li>請確認看到退款<b>訂單編號</b>後，才為系統已經受理退款申請！</li>
+    </ul>
+    如有疑問，請洽客服中心
+  </div>
+</div>
+<!-- START BLOCK : REDIR -->
+<div id="divredirect" name="divredirect" style="display:none">
+		<form name='fra' id='fra' method='POST'><input type=hidden name=act value=refund><input type=hidden name=content value='{CONTENT}'>
+			<table>
+				<caption>請確認以下資訊都正確</caption>
+				<tbody>
+					<tr>
+						<td>序號</td>
+						<td>匯款銀行代號*</td>
+						<td>匯款帳號*</td>
+						<td>金額*</td>
+						<td>匯款帳戶名稱</td>
+						<td>匯款銀行分行</td>
+						<td>內部訂單編號*</td>
+						<td>備註1</td>
+						<td>備註2</td>
+						<td>關聯Username</td>
+						<td>checksum</td>
+					</tr>
+					<!-- START BLOCK : DATA -->
+					<tr>
+						<td>{NO}</td>
+						<td>{VBankCode}</td>
+						<td>{VBankAccount}</td>
+						<td>{Amount}</td>
+						<td>{VAccountName}</td>
+						<td>{VBankName}</td>
+						<td>{StoreOrderId}</td>
+						<td>{Note1}</td>
+						<td>{Note2}</td>
+						<td>{UserId}</td>
+						<td>{Chksum}</td>
+					</tr>
+					<!-- END BLOCK : DATA -->
+					<tr>
+						<td colspan=2 align=center>共{TCOUNT}筆</td>
+						<td align=right>合計：</td>
+						<td>{TAMOUNT}</td>
+						<td colspan=7></td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan=11 align=center><input type=button name=okgo onclick="submitthis();" value="確定全部退款"><input type=button name=nogo onclick="window.history.back();" value="回上頁"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</form>
+</div>
+<script language=javascript>
+	document.getElementById("divtable").innerHTML = document.getElementById("divredirect").innerHTML;
+</script>
+<!-- END BLOCK : REDIR -->
+<!-- START BLOCK : RDONE -->
+<div id="divrdone" name="divrdone" style="display:inline">
+			<table>
+				<caption>以下退款正在處理中</caption>
+				<tbody>
+					<tr>
+						<td>匯款帳號</td>
+						<td>金額</td>
+					</tr>
+					<!-- START BLOCK : DATA1 -->
+					<tr>
+						<td>{VBankAccount}</td>
+						<td>{Amount}</td>
+					</tr>
+					<!-- END BLOCK : DATA1 -->
+					<tr>
+						<td align=right>合計：</td>
+						<td>{TAMOUNT}</td>
+					</tr>
+				</tbody>
+			</table>
+</div>
+<!-- END BLOCK : RDONE -->
+<!-- START BLOCK : RFAIL -->
+<div id="divrfail" name="divrfail" style="display:inline">
+			<table>
+				<caption><span style="color:red">以下退款全部失敗</span></caption>
+				<tbody>
+					<tr>
+						<td>匯款帳號</td>
+						<td>金額</td>
+						<td>失敗原因</td>
+					</tr>
+					<!-- START BLOCK : DATA2 -->
+					<tr>
+						<td>{VBankAccount}</td>
+						<td>{Amount}</td>
+						<td>{ERR}</td>
+					</tr>
+					<!-- END BLOCK : DATA2 -->
+				</tbody>
+			</table>
+</div>
+<!-- END BLOCK : RFAIL -->
+</body>
+</html>

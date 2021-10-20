@@ -1,0 +1,60 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{_WebTitle}</title>
+<link rel="stylesheet" href="../style_0/control_index.css" type="text/css">
+<script language="javascript" src="../js/ajax.js"></script>
+<script language="javascript">
+function ChgLangx($langx){
+	ajax.load("chglangx.php?langx="+ $langx, "EvalFun");
+}
+function EvalFun(str){
+	eval(str);
+}
+</script>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" leftmargin="0" topmargin="50" onload='document.LoginForm.username.focus();' ONDRAGSTART="window.event.returnValue=false" ONCONTEXTMENU="window.event.returnValue=false" onSelectStart="event.returnValue=false">
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+</table>
+<table border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td><img src="../images_0/index_1.jpg" width="102" height="212"></td>
+    <td><img src="../images_0/index_2.jpg" width="136" height="212"></td>
+    <td><img src="../images_0/index_3.jpg" width="121" height="212"></td>
+    <td><img src="../images_0/index_4.jpg" width="125" height="212"></td>
+    <td><img src="../images_0/index_5.jpg" width="126" height="212"></td>
+  </tr>
+  <tr>
+    <td height="100" colspan="5" align="center" valign="top" background="../images_0/bk.gif" style="padding-top:15">
+      <form name="LoginForm" action="" method="post">
+        <input type="hidden" name="login" value="Y">
+        <table border="0" cellpadding="2" cellspacing="0">
+        <tr>
+          <td width="250" rowspan="3" valign="top">
+            <!--a href="javascript:ChgLangx('zh-tw');"><img src="../images_0/lang_tw.gif" width="51" height="25" border="0"></a>
+            <a href="javascript:ChgLangx('zh-cn');"><img src="../images_0/lang_cn.gif" width="51" height="25" border="0"></a>
+            <a href="javascript:ChgLangx('en-us');"><img src="../images_0/lang_en.gif" width="51" height="25" border="0"></a>
+            <a href="javascript:ChgLangx('th-th');"><img src="../images_0/lang_th.gif" width="51" height="25" border="0"></a-->
+          </td>
+      	  <td align="right">{_Username} :</td>
+          <td><input type="text" name="username" size="16" class="za_text"></td>
+          <td width="60" align="right">&nbsp;</td>
+        </tr>
+        <tr>
+          <td align="right">{_Passwd} :</td>
+          <td><input type="password" name="pwd" size="16" class="za_text"></td>
+          <td align="right"><input type="submit" name="submit" value="{_Login}" class="za_button"></td>
+        </tr>
+        <tr>
+          <td align="right">{_IP} :</td>
+          <td>{IP}</td>
+          <td> </td>
+        </tr>
+        </table>
+      </form>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

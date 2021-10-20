@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+	<meta name="author" content="txpay.tw" />
+	<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+	<script src='https://code.jquery.com/jquery-1.9.1.min.js'></script>
+	<link type="text/css" rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/7.0.3/jquery.mmenu.all.css'>
+	<link type="text/css" rel="stylesheet" href="style/main.css" />
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jQuery.mmenu/7.0.3/jquery.mmenu.all.js'></script>
+	<script type="text/javascript">
+		$(function() {
+			$('nav#menu').mmenu();
+		});
+	</script>
+	<style>
+		tableo {border:1px solid #000}
+		table{
+    table-layout: fixed;
+    border-collapse: collapse;
+		}
+		td{
+    word-wrap:break-word;
+    padding: 5px;
+		}
+		tr:hover {
+		    background: #000 !important;
+		}
+		tr:hover td {
+		    background: #c7d4dd !important;
+		}
+	</style>
+
+	<style>
+		th, td {border:1px solid #aaa}
+		table {border-collapse:collapse}
+		
+		h2.headertekst {
+ 			text-align: center;
+ 			color:red;
+		}
+	</style>
+	
+	<script language=javascript>
+		function confirmthis() {
+			document.rfrm.submit();
+		}
+		
+		function submitthis() {
+			document.forms["fra"].submit();
+		}
+	
+	</script>
+</head>
+<body>
+<div class="page">
+  <!-- INCLUDE BLOCK : MENU -->
+	<div class="header">
+		<a href="#menu" data-icon="grid"></a>
+		鴻運支付
+	</div>
+  <div class='content' id='content'>
+    <h1>多筆儲值</h1>
+    <div id=divtable>
+    <form method=post name=rfrm id=rfrm enctype="multipart/form-data"><input type=hidden name=act value=upload>
+		<table>
+			<tbody>
+				<tr>
+					<td>上傳CSV檔案<span style="color:red">＊</span></td>
+					<td><input type=file name=CSVFILE id=CSVFILE value="" accept=".csv"></td>
+				</tr>
+				<tr>
+					<td colspan=2 align=center><input type=button value="確定上傳" onclick="confirmthis();"></td>
+				</tr>
+			</tbody>
+		</table>
+   	</form>
+   	</div>
+    <ul>
+    	<li>下載<a href="/batchdeposit.csv" download="batchdeposit.csv">範例csv檔案</a></li>
+    	<li>csv檔案格式 : <span style="color:blue">繳款方式(必填),金額(必填),商品名稱,內部訂單編號,姓名,email,手機,備註1,備註2,有效期限,關連Username</span></li>
+    	<li>繳款方式: CSPM為超商 , VBANK為ATM虛擬帳號</li>
+    	<li>單筆超商繳款金額最小50，最高2萬。虛擬帳號最小50，最高100萬，如果單筆超過2萬，需要用提款機的「繳費」功能。</li>
+    	<li>有效期限如果不填自動設為後天，日期格式為{TODAY}</li>
+    	<li>csv檔案請用UTF-8編碼儲存</li>
+    	<li>格式錯誤的資料將會自動跳過</li>
+    	<li>上傳後，系統會列出所有資料，請詳細比對確認後再送出！</li>
+    	<li>確認送出後，不可取消，也不可以更改！</li>
+    </ul>
+    如有疑問，請洽客服中心
+  </div>
+</div>
+<!-- START BLOCK : REDIR -->
+<div id="divredirect" name="divredirect" style="display:none">
+		<form name='fra' id='fra' method='POST'><input type=hidden name=act value=deposit><input type=hidden name=content value='{CONTENT}'>
+			<table>
+				<caption>請確認以下資訊都正確</caption>
+				<tbody>
+					<tr>
+						<td>序號</td>
+						<td>繳款方式*</td>
+						<td>金額*</td>
+						<td>商品名稱</td>
+						<td>內部訂單編號*</td>
+						<td>姓名</td>
+						<td>EMAIL</td>
+						<td>手機</td>
+						<td>備註1</td>
+						<td>備註2</td>
+						<td>有效日期</td>
+						<td>關聯Username</td>
+					</tr>
+					<!-- START BLOCK : DATA -->
+					<tr>
+						<td>{NO}</td>
+						<td>{PayMethod}</td>
+						<td>{Amount}</td>
+						<td>{PayInfo}</td>
+						<td>{StoreOrderId}</td>
+						<td>{PayName}</td>
+						<td>{PayEmail}</td>
+						<td>{PayPhone}</td>
+						<td>{Note1}</td>
+						<td>{Note2}</td>
+						<td>{ExpiredDate}</td>
+						<td>{UserId}</td>
+					</tr>
+					<!-- END BLOCK : DATA -->
+					<tr>
+						<td align=center>共{TCOUNT}筆</td>
+						<td align=right>合計：</td>
+						<td>{TAMOUNT}</td>
+						<td colspan=8></td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan=12 align=center><input type=button name=okgo onclick="submitthis();" value="確定全部產生儲值序號"><input type=button name=nogo onclick="window.history.back();" value="回上頁"></td>
+					</tr>
+				</tfoot>
+			</table>
+		</form>
+</div>
+<script language=javascript>
+	document.getElementById("divtable").innerHTML = document.getElementById("divredirect").innerHTML;
+</script>
+<!-- END BLOCK : REDIR -->
+<!-- START BLOCK : RDONE -->
+<div id="divrdone" name="divrdone" style="display:inline">
+			<table>
+				<caption>以下已經產生完成</caption>
+				<tbody>
+					<tr>
+						<td>序號</td>
+						<td>繳款方式*</td>
+						<td>金額*</td>
+						<td>商品名稱</td>
+						<td>內部訂單編號*</td>
+						<td>姓名</td>
+						<td>EMAIL</td>
+						<td>手機</td>
+						<td>備註1</td>
+						<td>備註2</td>
+						<td>有效日期</td>
+						<td>關聯Username</td>
+						<td>儲值碼或是銀行帳號</td>
+					</tr>
+					<!-- START BLOCK : DATA1 -->
+					<tr>
+						<td>{NO}</td>
+						<td>{PayMethod}</td>
+						<td>{Amount}</td>
+						<td>{PayInfo}</td>
+						<td>{StoreOrderId}</td>
+						<td>{PayName}</td>
+						<td>{PayEmail}</td>
+						<td>{PayPhone}</td>
+						<td>{Note1}</td>
+						<td>{Note2}</td>
+						<td>{ExpiredDate}</td>
+						<td>{UserId}</td>
+						<td>{CODE}</td>
+					</tr>
+					<!-- END BLOCK : DATA1 -->
+					<tr>
+						<td colspan=2 align=right>合計：</td>
+						<td>{TAMOUNT}</td>
+					</tr>
+				</tbody>
+			</table>
+</div>
+<!-- END BLOCK : RDONE -->
+<!-- START BLOCK : RFAIL -->
+<div id="divrfail" name="divrfail" style="display:inline">
+			<table>
+				<caption><span style="color:red">以下全部失敗</span></caption>
+				<tbody>
+					<tr>
+						<td>匯款帳號</td>
+						<td>金額</td>
+						<td>失敗原因</td>
+					</tr>
+					<!-- START BLOCK : DATA2 -->
+					<tr>
+						<td>{VBankAccount}</td>
+						<td>{Amount}</td>
+						<td>{ERR}</td>
+					</tr>
+					<!-- END BLOCK : DATA2 -->
+				</tbody>
+			</table>
+</div>
+<!-- END BLOCK : RFAIL -->
+</body>
+</html>
